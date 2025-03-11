@@ -1,0 +1,17 @@
+services:
+  nginx:
+    expose:
+      - 80
+      - 443
+    environment:
+      - VIRTUAL_HOST=${VIRTUAL_HOST}
+      - CERT_NAME=default
+    volumes:
+      - ${NGINX_SSL_PATH}:/etc/ssl/certs:ro
+    networks:
+      - nginx-proxy
+
+networks:
+  nginx-proxy:
+    external: true
+    driver: ${NETWORKS_DRIVER} 

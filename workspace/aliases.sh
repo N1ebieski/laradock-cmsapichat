@@ -114,6 +114,9 @@ alias gbr="git branch"
 alias gc="git commit"
 alias gck="git checkout"
 
+# php with xdebug
+alias phpd="php -dxdebug.mode=debug -dxdebug.start_with_request=yes"
+
 # Create a new directory and enter it
 function mkd() {
     mkdir -p "$@" && cd "$@"

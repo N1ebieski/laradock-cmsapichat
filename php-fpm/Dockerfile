@@ -255,6 +255,11 @@ RUN if [ $(php -r "echo PHP_MAJOR_VERSION;") = "8" ] || { [ $(php -r "echo PHP_M
 ;fi
 RUN sed -i "s/xdebug.cli_color=0/xdebug.cli_color=1/" /usr/local/etc/php/conf.d/xdebug.ini
 
+# Create folder for xdebug profiling
+RUN XDEBUG_OUTPUT_DIR=$(grep 'xdebug.output_dir' /usr/local/etc/php/conf.d/xdebug.ini | cut -d'"' -f2) && \
+  mkdir -p "${XDEBUG_OUTPUT_DIR}" && \
+  chmod 777 "${XDEBUG_OUTPUT_DIR}"
+
 ###########################################################################
 # pcov:
 ###########################################################################
@@ -654,7 +659,7 @@ RUN if [ ${INSTALL_OCI8} = true ]; then \
 ARG INSTALL_IONCUBE=false
 
 RUN if [ ${INSTALL_IONCUBE} = true ]; then \
-    if [ $(php -r "echo PHP_MAJOR_VERSION;") != "8" ]; then \
+    #if [ $(php -r "echo PHP_MAJOR_VERSION;") != "8" ]; then \
       # Install the php ioncube loader
       curl -L -o /tmp/ioncube_loaders_lin_x86-64.tar.gz https://downloads.ioncube.com/loader_downloads/ioncube_loaders_lin_x86-64.tar.gz \
       && tar zxpf /tmp/ioncube_loaders_lin_x86-64.tar.gz -C /tmp \
@@ -662,7 +667,7 @@ RUN if [ ${INSTALL_IONCUBE} = true ]; then \
       && printf "zend_extension=ioncube_loader.so\n" > $PHP_INI_DIR/conf.d/0ioncube.ini \
       && rm -rf /tmp/ioncube* \
       && php -m | grep -oiE '^ionCube Loader$' \
-    ;fi \
+    #;fi \
 ;fi
 
 ###########################################################################

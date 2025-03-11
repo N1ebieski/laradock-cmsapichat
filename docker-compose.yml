@@ -183,6 +183,7 @@ services:
         - ${APP_CODE_PATH_HOST}:${APP_CODE_PATH_CONTAINER}${APP_CODE_CONTAINER_FLAG}
         - docker-in-docker:/certs/client
         - ./php-worker/supervisord.d:/etc/supervisord.d
+        - ${DATA_PATH_HOST}/ssh:/home/laradock/.ssh
       extra_hosts:
         - "dockerhost:${DOCKER_HOST_IP}"
       ports:
@@ -440,8 +441,12 @@ services:
       depends_on:
         - php-fpm
       networks:
-        - frontend
-        - backend
+        frontend:    
+        backend:
+          aliases:
+            - wordpress.cmsapichat.pl.test
+            - icore.cmsapichat.pl.test
+            - cmsapichat.pl.test
 
 ### OpenResty Server #########################################
     openresty:
