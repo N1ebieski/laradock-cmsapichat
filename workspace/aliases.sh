@@ -120,7 +120,7 @@ alias gc="git commit"
 alias gck="git checkout"
 
 # php with xdebug
-alias phpd="php -dxdebug.mode=debug -dxdebug.start_with_request=yes"
+alias phpd="XDEBUG_SESSION=1 php"
 
 # Create a new directory and enter it
 function mkd() {
