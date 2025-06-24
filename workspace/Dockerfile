@@ -49,7 +49,7 @@ ENV PGID ${PGID}
 
 # always run apt update when start and after add new source list, then clean up at end.
 RUN set -xe; \
-    apt-get update --allow-releaseinfo-change -yqq && \
+    apt-get update -yqq && \
     pecl channel-update pecl.php.net && \
     if [ $(php -r "echo PHP_MAJOR_VERSION;") = "8" ] && [ $(php -r "echo PHP_MINOR_VERSION;") != "0" ]; then \
       groupmod --new-name laradock ubuntu; \
@@ -356,7 +356,7 @@ RUN if [ ${INSTALL_XDEBUG} = true ]; then \
   apt-get install -yqq pkg-config php-xml php${LARADOCK_PHP_VERSION}-xml && \
   if [ $(php -r "echo PHP_MAJOR_VERSION;") = "8" ] || { [ $(php -r "echo PHP_MAJOR_VERSION;") = "7" ] && { [ $(php -r "echo PHP_MINOR_VERSION;") = "4" ] || [ $(php -r "echo PHP_MINOR_VERSION;") = "3" ] ;} ;}; then \
     if [ $(php -r "echo PHP_MAJOR_VERSION;") = "8" ]; then \
-      pecl install xdebug-3.4.1; \
+      pecl install xdebug-3.2.0; \
     else \
       pecl install xdebug-3.1.6; \
     fi; \
@@ -435,7 +435,7 @@ ENV BLACKFIRE_CLIENT_TOKEN ${BLACKFIRE_CLIENT_TOKEN}
 RUN if [ ${INSTALL_XDEBUG} = false -a ${INSTALL_BLACKFIRE} = true ]; then \
     curl -L https://packages.blackfire.io/gpg.key | apt-key add - && \
     echo "deb http://packages.blackfire.io/debian any main" | tee /etc/apt/sources.list.d/blackfire.list && \
-    apt-get update --allow-releaseinfo-change -yqq && \
+    apt-get update -yqq && \
     apt-get install blackfire-agent \
 ;fi
 
@@ -579,7 +579,6 @@ ARG INSTALL_PHPREDIS=false
 
 RUN if [ ${INSTALL_PHPREDIS} = true ]; then \
     apt-get update \
-    && LC_ALL=C.UTF-8 add-apt-repository ppa:ondrej/php \
     && apt-get install -yqq php${LARADOCK_PHP_VERSION}-redis \
 ;fi
 
@@ -703,7 +702,7 @@ ARG INSTALL_FSWATCH=false
 RUN if [ ${INSTALL_FSWATCH} = true ]; then \
     apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 47FE03C1 \
     && add-apt-repository -y ppa:hadret/fswatch \
-    || apt-get update --allow-releaseinfo-change -yqq \
+    || apt-get update -yqq \
     && apt-get -y install fswatch \
 ;fi
 
@@ -1014,7 +1013,7 @@ ARG INSTALL_V8JS=false
 RUN set -xe; \
   if [ ${INSTALL_V8JS} = true ]; then \
     add-apt-repository -y ppa:pinepain/libv8-archived \
-    && apt-get update --allow-releaseinfo-change -yqq \
+    && apt-get update -yqq \
     && apt-get install -y libv8-5.4 && \
     if [ $(php -r "echo PHP_MAJOR_VERSION;") = "5" ]; then \
       pecl install v8js-0.6.4; \
@@ -1137,7 +1136,7 @@ RUN set -eux; \
       ###########################################################################
       curl https://packages.microsoft.com/keys/microsoft.asc | apt-key add - && \
       curl https://packages.microsoft.com/config/ubuntu/$(lsb_release -rs)/prod.list > /etc/apt/sources.list.d/mssql-release.list && \
-      apt-get update --allow-releaseinfo-change -yqq && \
+      apt-get update -yqq && \
       ACCEPT_EULA=Y apt-get install -yqq msodbcsql18 mssql-tools18 unixodbc unixodbc-dev libgss3 odbcinst locales && \
       ln -sfn /opt/mssql-tools/bin/sqlcmd /usr/bin/sqlcmd && \
       ln -sfn /opt/mssql-tools/bin/bcp /usr/bin/bcp && \
@@ -1393,7 +1392,7 @@ ARG LARADOCK_PHALCON_VERSION
 ENV LARADOCK_PHALCON_VERSION ${LARADOCK_PHALCON_VERSION}
 
 RUN if [ $INSTALL_PHALCON = true ]; then \
-      apt-get update --allow-releaseinfo-change -yqq \
+      apt-get update -yqq \
       && pecl channel-update pecl.php.net \
       && apt-get install -yqq libpcre3-dev; \
       pecl install phalcon-${LARADOCK_PHALCON_VERSION}; \
